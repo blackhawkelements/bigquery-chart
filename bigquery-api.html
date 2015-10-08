@@ -6,7 +6,6 @@
 Element providing a Result Set executed against Google BigQuery
 ##### Example
     <bigquery-api
-        title="Wikipedia Top Topics"
         query="SELECT TOP(title, 10) as title, COUNT(*) as revision_count FROM [publicdata:samples.wikipedia] WHERE wp_namespace = 0;"
         projectId="YOUR_PROJECT_ID"
     </bigquery-api>
@@ -76,15 +75,7 @@ Element providing a Result Set executed against Google BigQuery
         },
         response: { notify: true },
         state: { observer: 'stateChanged' },
-        /**
-         * A title to be displayed on top of the query results list.
-         * @attribute title
-         * @type string
-         */
-        title: {
-          type: String,
-          value: 'Big Query Results'
-        }
+
       },
       created: function () {
         //this.response = {};

@@ -2,6 +2,17 @@
 <link rel="import" href="../google-chart/google-chart.html">
 <link rel="import" href="bigquery-api.html">
 
+<!--
+Element providing a Chart based on bigquery query
+##### Example
+    <bigquery-chart project-id="YOUR-PROJECT-ID"
+      query="SELECT TOP(title, 10) as title, COUNT(*) as revision_count FROM [publicdata:samples.wikipedia] WHERE wp_namespace = 0;">
+    </bigquery-chart>
+@element bigquery-chart
+@blurb Element providing a Chart based on bigquery query
+@status alpha
+@url http://blackhawkwebcomponents.github.io/bigquery-chart
+-->
 <dom-module id="bigquery-chart">
 
   <template>
@@ -15,9 +26,8 @@
         width: 500px;
       }
     </style>
-    <bigquery-api title="Top Wikipedia Topics"
-                  query="SELECT TOP(title, 10) as title, COUNT(*) as revision_count FROM [publicdata:samples.wikipedia] WHERE wp_namespace = 0;"
-                  project-id="blackhawk-website"
+    <bigquery-api query="{{query}}"
+                  project-id="{{projectId}}"
                   auto
                   response="{{response}}">
     </bigquery-api>
@@ -35,7 +45,25 @@
     is: 'bigquery-chart',
 
     properties: {
-
+      /**
+       * Application's projectId for using Big Query API.
+       * @attribute projectId
+       * @type string
+       */
+      projectId: {
+        value: null,
+        notify: true
+      },
+      /**
+       * A query to execute against Big Query api.
+       * @attribute query
+       * @type string
+       * @default null
+       */
+      query: {
+        value: null,
+        notify: true
+      }
     },
 
      /**
