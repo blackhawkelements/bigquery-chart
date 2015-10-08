@@ -1,0 +1,134 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../google-signin/google-signin-aware.html">
+<link rel="import" href="../google-apis/google-client-loader.html">
+
+<!--
+Element providing a Result Set executed against Google BigQuery
+##### Example
+    <bigquery-api
+        title="Wikipedia Top Topics"
+        query="SELECT TOP(title, 10) as title, COUNT(*) as revision_count FROM [publicdata:samples.wikipedia] WHERE wp_namespace = 0;"
+        projectId="YOUR_PROJECT_ID"
+    </bigquery-api>
+@element bigquery-api
+@blurb Element providing a Result Set executed against Google BigQuery
+@status alpha
+@url http://blackhawkwebcomponents.github.io/bigquery-api
+-->
+<dom-module id="bigquery-api">
+  <template>
+
+        <google-signin-aware scopes="https://www.googleapis.com/auth/bigquery"
+          on-google-signin-aware-success="signIn"
+          on-google-signin-aware-signed-out="signOut">
+        </google-signin-aware>
+
+        <google-client-loader id="bigquery" name="bigquery" version="v2" on-google-api-load="apiLoad">
+        </google-client-loader>
+
+    </template>
+  <script>
+    Polymer({
+      is: 'bigquery-api',
+      properties: {
+        apiLoaded: {
+          type: Boolean,
+          value: false,
+          observer: 'stateChanged'
+        },
+        authorized: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          observer: 'stateChanged'
+        },
+        /**
+         * Setting auto will run the query any time it changes
+         * @attribute auto
+         * @type boolean
+         * @default false
+         */
+        auto: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          observer: 'stateChanged'
+        },
+        /**
+         * Application's projectId for using Big Query API.
+         * @attribute projectId
+         * @type string
+         */
+        projectId: {
+          value: null,
+          notify: true
+        },
+        /**
+         * A query to execute against Big Query api.
+         * @attribute query
+         * @type string
+         * @default null
+         */
+        query: {
+          value: null,
+          notify: true,
+          observer: 'stateChanged'
+        },
+        response: { notify: true },
+        state: { observer: 'stateChanged' },
+        /**
+         * A title to be displayed on top of the query results list.
+         * @attribute title
+         * @type string
+         */
+        title: {
+          type: String,
+          value: 'Big Query Results'
+        }
+      },
+      created: function () {
+        //this.response = {};
+      },
+      apiLoad: function () {
+        //console.log('bigquery-api.apiLoad called');
+        this.apiLoaded = true;
+      },
+      signIn: function (response) {
+        console.log('bigquery-api.signIn called');
+        this.authorized = true;
+      },
+      signOut: function () {
+        this.authorized = false;
+      },
+      stateChanged: function () {
+        //console.log('bigquery-api.stateChanged called', this.auto, this.authorized, this.apiLoaded, this.query);
+        if (this.auto && this.authorized && this.apiLoaded && this.query != null) {
+          this.runQuery();
+        }
+      },
+      /**
+       * Runs a BigQuery query job
+       *
+       * @method runQuery
+       */
+      runQuery: function () {
+        console.log('runQuery called');
+        console.log('query: ' + this.query);
+        var request = this.$.bigquery.api.jobs.query({
+          'projectId': this.projectId,
+          'timeoutMs': '30000',
+          'query': this.query
+        });
+        request.execute(function (response) {
+          console.log('response',response.result);
+          this.response = response.result;
+          this.processResponse(response.result);
+        }.bind(this));
+      },
+      processResponse: function (response) {
+        this.fire('bigquery-response', { response: response });
+      }
+
+    });
+  </script>
+</dom-module>

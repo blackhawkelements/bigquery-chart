@@ -1,0 +1,60 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>bigquery-chart Demo</title>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../bigquery-chart.html">
+    <link rel="import" href="../bigquery-api.html">
+    <link rel="import" href="../../google-signin/google-signin.html">
+    <link rel="import" href="../../google-chart/google-chart.html">
+  </head>
+  <body unresolved>
+
+    <template is="dom-bind">
+
+      <google-signin
+        client-id="616981594512-9qhbmltja9bhuoh1rfl2mesej0qqj6b8.apps.googleusercontent.com"
+        scopes="https://www.googleapis.com/auth/bigquery">
+      </google-signin>
+
+      <p>An example of <code>&lt;bigquery-api&gt;</code>:</p>
+
+      <bigquery-api title="Top Wikipedia Topics"
+                    query="SELECT TOP(title, 10) as title, COUNT(*) as revision_count FROM [publicdata:samples.wikipedia] WHERE wp_namespace = 0;"
+                    project-id="blackhawk-website"
+                    auto
+                    response="{{response}}">
+      </bigquery-api>
+
+      <template is="dom-repeat" items="{{response.rows}}">
+        <div>
+          <template is="dom-repeat" items="{{item.f}}">
+            <span>{{item.v}}</span>
+          </template>
+        </div>
+      </template>
+
+      <p>An example of <code>&lt;bigquery-chart&gt;</code>:</p>
+      <bigquery-chart></bigquery-chart>
+
+    </template>
+
+    <script>
+      var seedElement = document.querySelector('bigquery-chart');
+
+
+    </script>
+
+  </body>
+</html>
