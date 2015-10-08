@@ -22,8 +22,8 @@ Element providing a Chart based on bigquery query
         box-sizing: border-box;
       }
       google-chart {
-        height: 300px;
-        width: 500px;
+        width:600px;
+        height:300px;
       }
     </style>
     <bigquery-api query="{{query}}"
@@ -33,6 +33,8 @@ Element providing a Chart based on bigquery query
     </bigquery-api>
 
     <google-chart
+      type="{{type}}"
+      options="{{options}}"
       data="{{computeChartData(response)}}">
     </google-chart>
   </template>
@@ -63,6 +65,34 @@ Element providing a Chart based on bigquery query
       query: {
         value: null,
         notify: true
+      },
+      /**
+       * Google Chart Type
+       * @attribute type
+       * @type string
+       * @default null
+       */
+      type: {
+        value: 'line',
+        notify: true
+      },
+      /**
+       * Sets the options for the chart.
+       *
+       * Example:
+       * <pre>{
+       *   title: "Chart title goes here",
+       *   hAxis: {title: "Categories"},
+       *   vAxis: {title: "Values", minValue: 0, maxValue: 2},
+       *   legend: "none"
+       * };</pre>
+       * See <a href="https://google-developers.appspot.com/chart/interactive/docs/gallery">Google Visualization API reference (Chart Gallery)</a>
+       * for the options available to each chart type.
+       *
+       */
+      options: {
+        type: Object,
+        value: function() { return {}; }
       }
     },
 
@@ -91,6 +121,8 @@ Element providing a Chart based on bigquery query
              var val;
              if (bqResponse.schema.fields[j].type == 'INTEGER')
                val = parseInt(row.f[j].v);
+             else if (bqResponse.schema.fields[j].type == 'FLOAT')
+                 val = parseFloat(row.f[j].v);
              else
                val = row.f[j].v;
              rowArr.push(val);

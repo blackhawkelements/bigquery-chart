@@ -15,13 +15,15 @@
     <template is="dom-bind">
 
       <google-signin
-        client-id="616981594512-9qhbmltja9bhuoh1rfl2mesej0qqj6b8.apps.googleusercontent.com"
+        client-id="584189545211-041lkvshmcfdvahqd1n5ori7ert8isif.apps.googleusercontent.com"
         scopes="https://www.googleapis.com/auth/bigquery">
       </google-signin>
 
       <p>An example of <code>&lt;bigquery-chart&gt;</code>:</p>
-      <bigquery-chart project-id="blackhawk-website"
-        query="SELECT TOP(title, 10) as title, COUNT(*) as revision_count FROM [publicdata:samples.wikipedia] WHERE wp_namespace = 0;">
+      <bigquery-chart project-id='ces-project'
+        type='line'
+        options='{"title": "Supply vs Mixed Air Temperature"}'
+        query='SELECT Timestamp, SupplyTemp, MixedAirTemp  FROM [sample.logs] WHERE SupplyTemp IS NOT NULL AND MixedAirTemp IS NOT NULL LIMIT 100'>
       </bigquery-chart>
 
     </template>
