@@ -1,0 +1,105 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../google-chart/google-chart.html">
+<link rel="import" href="bigquery-api.html">
+
+<!--
+Element providing a Chart based on bigquery query
+##### Example
+    <bigquery-chart project-id="YOUR-PROJECT-ID"
+      query="SELECT TOP(title, 10) as title, COUNT(*) as revision_count FROM [publicdata:samples.wikipedia] WHERE wp_namespace = 0;">
+    </bigquery-chart>
+@element bigquery-chart
+@blurb Element providing a Chart based on bigquery query
+@status alpha
+@url http://blackhawkwebcomponents.github.io/bigquery-chart
+-->
+<dom-module id="bigquery-chart">
+
+  <template>
+    <style>
+      :host {
+        display: block;
+        box-sizing: border-box;
+      }
+      google-chart {
+        height: 300px;
+        width: 500px;
+      }
+    </style>
+    <bigquery-api query="{{query}}"
+                  project-id="{{projectId}}"
+                  auto
+                  response="{{response}}">
+    </bigquery-api>
+
+    <google-chart
+      data="{{computeChartData(response)}}">
+    </google-chart>
+  </template>
+
+</dom-module>
+
+<script>
+  Polymer({
+
+    is: 'bigquery-chart',
+
+    properties: {
+      /**
+       * Application's projectId for using Big Query API.
+       * @attribute projectId
+       * @type string
+       */
+      projectId: {
+        value: null,
+        notify: true
+      },
+      /**
+       * A query to execute against Big Query api.
+       * @attribute query
+       * @type string
+       * @default null
+       */
+      query: {
+        value: null,
+        notify: true
+      }
+    },
+
+     /**
+      * Convert a bigquery response into Google Chart friendly format
+      *
+      * @bigQueryResponse {object} bigquery response
+      * @return {object} Google Chart format.
+      */
+     computeChartData: function(bigQueryResponse) {
+       //console.log(JSON.stringify(value, null, 2));
+       var bqResponse = bigQueryResponse;
+       // preprocess step, will make it easier to work with??
+       var arr = [];
+       if (bqResponse && bqResponse.rows) {
+         var fieldArr = [];
+         for (var i = 0; i < bqResponse.schema.fields.length; ++i) {
+           var field = bqResponse.schema.fields[i];
+           fieldArr.push(field.name);
+         }
+         arr.push(fieldArr);
+         for (var i = 0; i < bqResponse.rows.length; ++i) {
+           var row = bqResponse.rows[i];
+           var rowArr = [];
+           for (var j = 0; j < row.f.length; ++j) {
+             var val;
+             if (bqResponse.schema.fields[j].type == 'INTEGER')
+               val = parseInt(row.f[j].v);
+             else
+               val = row.f[j].v;
+             rowArr.push(val);
+           }
+           arr.push(rowArr);
+         }
+       }
+       //console.log('arr: ' + JSON.stringify(arr, null, 2));
+       return arr;
+     }
+  });
+</script>

@@ -1,0 +1,39 @@
+{
+  "name": "bigquery-chart",
+  "authors": [
+    "Anonymous <anonymous@example.com>"
+  ],
+  "description": "An element providing a solution to no problem in particular.",
+  "keywords": [
+    "web-component",
+    "polymer",
+    "seed"
+  ],
+  "main": "bigquery-chart.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/<USERNAME>/seed-element/",
+  "ignore": [
+    "/.*",
+    "/test/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.1.0",
+    "google-signin": "GoogleWebComponents/google-signin#~1.1.0",
+    "google-apis": "GoogleWebComponents/google-apis#~1.1.1",
+    "google-chart": "GoogleWebComponents/google-chart#~1.0.3"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "*"
+  },
+  "_release": "fc158a5455",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "fc158a5455d3608f2af350659a766e5c922ad362"
+  },
+  "_source": "git://github.com/blackhawkelements/bigquery-chart.git",
+  "_target": "master",
+  "_originalSource": "blackhawkelements/bigquery-chart",
+  "_direct": true
+}

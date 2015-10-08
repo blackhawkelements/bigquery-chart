@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>bigquery-chart Demo</title>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../bigquery-chart.html">
+    <link rel="import" href="../bigquery-api.html">
+    <link rel="import" href="../../google-signin/google-signin.html">
+    <link rel="import" href="../../google-chart/google-chart.html">
+  </head>
+  <body unresolved>
+
+    <template is="dom-bind">
+
+      <google-signin
+        client-id="616981594512-9qhbmltja9bhuoh1rfl2mesej0qqj6b8.apps.googleusercontent.com"
+        scopes="https://www.googleapis.com/auth/bigquery">
+      </google-signin>
+
+      <p>An example of <code>&lt;bigquery-chart&gt;</code>:</p>
+      <bigquery-chart project-id="blackhawk-website"
+        query="SELECT TOP(title, 10) as title, COUNT(*) as revision_count FROM [publicdata:samples.wikipedia] WHERE wp_namespace = 0;">
+      </bigquery-chart>
+
+    </template>
+
+    <script>
+      var seedElement = document.querySelector('bigquery-chart');
+    </script>
+
+  </body>
+</html>
