@@ -91,7 +91,17 @@ Element providing a Chart based on bigquery query
       options: {
         type: Object,
         value: function() { return {}; }
-      }
+      },
+      /**
+       * row count of data returned
+       * @attribute rowCount
+       * @type integer
+       * @default null
+       */
+      rowCount: {
+        value: null,
+        notify: true
+      },
     },
 
      /**
@@ -106,6 +116,9 @@ Element providing a Chart based on bigquery query
        // preprocess step, will make it easier to work with??
        var arr = [];
        if (bqResponse && bqResponse.rows) {
+         // update the rowCount, a local property
+         this.rowCount = bqResponse.rows.length;
+
          var fieldArr = [];
          for (var i = 0; i < bqResponse.schema.fields.length; ++i) {
            var field = bqResponse.schema.fields[i];

@@ -103,15 +103,15 @@ Element providing a Result Set executed against Google BigQuery
        * @method runQuery
        */
       runQuery: function () {
-        console.log('runQuery called');
-        console.log('query: ' + this.query);
+        //console.log('runQuery called');
+        //console.log('query: ' + this.query);
         var request = this.$.bigquery.api.jobs.query({
           'projectId': this.projectId,
           'timeoutMs': '30000',
           'query': this.query
         });
         request.execute(function (response) {
-          console.log('response',response.result);
+          //console.log('response',response.result);
           this.response = response.result;
           this.processResponse(response.result);
         }.bind(this));
